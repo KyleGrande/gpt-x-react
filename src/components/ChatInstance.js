@@ -93,7 +93,7 @@ const ChatInstance = () => {
     return (
       <div className="Chat-Instance">
         <div id="chat-container">
-          <h1>GPT-X (Test build)</h1>
+          <h1>GPT-X (Alpha)</h1>
           <div id="chat-area" ref={chatAreaRef}>
             {messages.map((msg, index) => (
               <p key={index} className={`${msg.sender.toLowerCase()}-message`}>
