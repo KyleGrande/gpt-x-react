@@ -84,6 +84,13 @@ h2 {
   overflow-y: scroll;
   padding: 10px;
   margin-bottom: 10px;
+  /* nezr line if overflow */
+
+}
+#chat-area{
+  overflow-x: hidden;
+  /* Allow content to wrap to the next line */
+  white-space: normal;
 }
 #interpreter-area {
   font-size: 12px;

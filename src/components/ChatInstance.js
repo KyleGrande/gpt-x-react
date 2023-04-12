@@ -7,14 +7,14 @@ import bash from 'react-syntax-highlighter/dist/esm/languages/hljs/bash';
 SyntaxHighlighter.registerLanguage('python', python);
 SyntaxHighlighter.registerLanguage('bash', bash);
 
-const ChatInstance = () => {
-    const [messages, setMessages] = useState([]);
+const ChatInstance = ({ uuid, apiKey, onDelete }) => {
+  const [messages, setMessages] = useState([]);
     const [userInput, setUserInput] = useState('');
     const [codeSnippets, setCodeSnippets] = useState([]);
     const [snippetIndex, setSnippetIndex] = useState(-1);
     const fileInputRef = useRef();
     const chatAreaRef = useRef();
-  
+
     useEffect(() => {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }, [messages]);
@@ -57,15 +57,17 @@ const ChatInstance = () => {
         try {
           const formData = new FormData();
           formData.append('message', userInput);
-    
+          formData.append("uuid", uuid);
           const response = await axios.post('http://localhost:5001/send_message', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
           });
     
           const data = response.data;
     
-          appendMessage('Assistant', data.response);
-    
+          appendMessage('Assistant', data.gpt_response);
+          //if (data.gpt_response2)
+          if (data.gpt_response2)
+            appendMessage('Assistant', data.gpt_response2);
           if (data.code_snippet || data.interpreter_output) {
             updateInterpreter(data.code_snippet, data.interpreter_output.result);
           }
@@ -87,7 +89,7 @@ const ChatInstance = () => {
   
       const formData = new FormData();
       formData.append('file', fileInputRef.current.files[0]);
-  
+      formData.append("uuid", uuid);
       try {
         const response = await axios.post('http://localhost:5001/send_file', formData, {
           headers: {
@@ -95,7 +97,12 @@ const ChatInstance = () => {
           },
         });
   
-        appendMessage('Interpreter', JSON.stringify(response.data.result));
+        appendMessage('Interpreter', (response.data.system));
+        appendMessage('Assistant', (response.data.response));
+        appendMessage('Assistant', (response.data.response2));
+        if (response.data.code_snippet || response.data.interpreter_output) {
+          updateInterpreter(response.data.code_snippet, response.data.interpreter_output.result);
+        }
       } catch (error) {
         appendMessage('Interpreter', 'Error: ' + error.response.data);
       }
