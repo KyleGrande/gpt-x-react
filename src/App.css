@@ -84,6 +84,8 @@ h2 {
   overflow-y: scroll;
   padding: 10px;
   margin-bottom: 10px;
+
+  
   /* nezr line if overflow */
 
 }
@@ -94,6 +96,8 @@ h2 {
 }
 #interpreter-area {
   font-size: 12px;
+  overflow-x: scroll;
+  white-space: nowrap;
 }
 
 #chat-area{
