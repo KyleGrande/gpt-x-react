@@ -18,7 +18,35 @@ const ChatInstance = () => {
     useEffect(() => {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }, [messages]);
-  
+    
+    //TEST
+    const formatMessage = (message) => {
+      const linkRegex = /\[link\](.*?)\[\/link\]/g;
+      const parts = message.split(linkRegex);
+      const matches = Array.from(message.matchAll(linkRegex));
+    
+      return (
+        <>
+          {parts.map((part, index) => {
+            if (index < matches.length) {
+              const filePath = matches[index][1];
+              const fileName = filePath.split('/').pop();
+              const fileURL = process.env.PUBLIC_URL + filePath;
+              return (
+                <React.Fragment key={index}>
+                  {part}
+                  <a href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
+                    {fileName}
+                  </a>
+                </React.Fragment>
+              );
+            }
+            return part;
+          })}
+        </>
+      );
+    };
+
     const sendMessage = async (e) => {
       e.preventDefault();
     
@@ -95,9 +123,14 @@ const ChatInstance = () => {
         <div id="chat-container">
           <h1>GPT-X (Alpha)</h1>
           <div id="chat-area" ref={chatAreaRef}>
-            {messages.map((msg, index) => (
+            {/* {messages.map((msg, index) => (
               <p key={index} className={`${msg.sender.toLowerCase()}-message`}>
                 <b>{msg.sender}:</b> {msg.message}
+              </p>
+            ))} */}
+            {messages.map((msg, index) => (
+              <p key={index} className={`${msg.sender.toLowerCase()}-message`}>
+                <b>{msg.sender}:</b> {formatMessage(msg.message)}
               </p>
             ))}
           </div>
