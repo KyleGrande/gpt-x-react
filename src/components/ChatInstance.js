@@ -19,7 +19,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }, [messages]);
     
-    //TEST
+    // //TEST
     // const formatMessage = (message) => {
     //   const linkRegex = /\[link\](.*?)\[\/link\]/g;
     //   const parts = message.split(linkRegex);
@@ -86,7 +86,6 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
         </>
       );
     };
-    
 
 
     const sendMessage = async (e) => {
