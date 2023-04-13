@@ -20,8 +20,35 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
     }, [messages]);
     
     //TEST
+    // const formatMessage = (message) => {
+    //   const linkRegex = /\[link\](.*?)\[\/link\]/g;
+    //   const parts = message.split(linkRegex);
+    //   const matches = Array.from(message.matchAll(linkRegex));
+    
+    //   return (
+    //     <>
+    //       {parts.map((part, index) => {
+    //         if (index < matches.length) {
+    //           const filePath = matches[index][1];
+    //           const fileName = filePath.split('/').pop();
+    //           const fileURL = process.env.PUBLIC_URL + filePath;
+    //           return (
+    //             <React.Fragment key={index}>
+    //               {part}
+    //               <a href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
+    //                 {fileName}
+    //               </a>
+    //             </React.Fragment>
+    //           );
+    //         }
+    //         return part;
+    //       })}
+    //     </>
+    //   );
+    // };
     const formatMessage = (message) => {
-      const linkRegex = /\[link\](.*?)\[\/link\]/g;
+      const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]/g;
+    
       const parts = message.split(linkRegex);
       const matches = Array.from(message.matchAll(linkRegex));
     
@@ -29,23 +56,38 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
         <>
           {parts.map((part, index) => {
             if (index < matches.length) {
-              const filePath = matches[index][1];
-              const fileName = filePath.split('/').pop();
-              const fileURL = process.env.PUBLIC_URL + filePath;
-              return (
-                <React.Fragment key={index}>
-                  {part}
-                  <a href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
-                    {fileName}
-                  </a>
-                </React.Fragment>
-              );
+              const linkMatch = matches[index][1];
+              const imgMatch = matches[index][2];
+    
+              if (linkMatch) {
+                const filePath = linkMatch;
+                const fileName = filePath.split('/').pop();
+                const fileURL = process.env.PUBLIC_URL + filePath;
+                return (
+                  <React.Fragment key={index}>
+                    {part}
+                    <a href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
+                      {fileName}
+                    </a>
+                  </React.Fragment>
+                );
+              } else if (imgMatch) {
+                const imgSrc = imgMatch;
+                return (
+                  <React.Fragment key={index}>
+                    {part}
+                    <img src={imgSrc} alt="" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+                  </React.Fragment>
+                );
+              }
             }
             return part;
           })}
         </>
       );
     };
+    
+
 
     const sendMessage = async (e) => {
       e.preventDefault();
