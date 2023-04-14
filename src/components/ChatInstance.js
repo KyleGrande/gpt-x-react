@@ -47,8 +47,8 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
     //   );
     // };
     const formatMessage = (message) => {
-      const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]/g;
-    
+      const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|(?:```((?:.|\n)*?)```)/g;
+
       const parts = message.split(linkRegex);
       const matches = Array.from(message.matchAll(linkRegex));
     
@@ -58,11 +58,16 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
             if (index < matches.length) {
               const linkMatch = matches[index][1];
               const imgMatch = matches[index][2];
+              const codeMatch = matches[index][3];
     
               if (linkMatch) {
                 const filePath = linkMatch;
                 const fileName = filePath.split('/').pop();
                 const fileURL = process.env.PUBLIC_URL + filePath;
+                //get the index of the linkmatch in the original parts array
+                const linkIndex = parts.indexOf(linkMatch);
+                //delete the link match from the parts array
+                parts.splice(linkIndex, 1);
                 return (
                   <React.Fragment key={index}>
                     {part}
@@ -73,10 +78,28 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
                 );
               } else if (imgMatch) {
                 const imgSrc = imgMatch;
+                //get the index of the imagematch in the original parts array
+                const imgIndex = parts.indexOf(imgMatch);
+                //delete the image match from the parts array
+                parts.splice(imgIndex, 1);
                 return (
                   <React.Fragment key={index}>
                     {part}
                     <img src={imgSrc} alt="" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+                  </React.Fragment>
+                );
+              } else if (codeMatch) {
+                const codeSnippet = codeMatch;
+                //get the index of the imagematch in the original parts array
+                const codeIndex = parts.indexOf(codeMatch);
+                //delete the image match from the parts array
+                parts.splice(codeIndex, 1);
+                return (
+                  <React.Fragment key={index}>
+                    {part}
+                    <SyntaxHighlighter language="python" style={agate}>
+                      {codeSnippet}
+                    </SyntaxHighlighter>
                   </React.Fragment>
                 );
               }
