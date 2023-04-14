@@ -50,6 +50,14 @@ function App() {
   const deleteChatInstance = (id) => {
     setChatInstances((prevInstances) => {
       const updatedInstances = prevInstances.filter((instance) => instance.id !== id);
+
+      axios.post('http://localhost:5001/delete_chat', { uuid: id })
+      .then(() => {
+        // You can handle the successful response here if needed
+      })
+      .catch((error) => {
+        console.error('Error deleting chat:', error);
+      });
   
       if (id === activeChat && updatedInstances.length > 0) {
         // Set active chat to the most next instance if avaailable if not then previous
