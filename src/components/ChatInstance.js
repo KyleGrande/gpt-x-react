@@ -62,7 +62,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
     
               if (linkMatch) {
                 const filePath = linkMatch;
-                const fileName = filePath.split('/').pop();
+                const fileName = filePath.split('/').pop(); //Fix this eventually
                 const fileURL = process.env.PUBLIC_URL + filePath;
                 //get the index of the linkmatch in the original parts array
                 const linkIndex = parts.indexOf(linkMatch);
