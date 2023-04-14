@@ -100,7 +100,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
                 return (
                   <React.Fragment key={index}>
                     {part}
-                    <SyntaxHighlighter language="python" style={agate}>
+                    <SyntaxHighlighter language="bash" style={agate}>
                       {codeSnippet}
                     </SyntaxHighlighter>
                   </React.Fragment>
