@@ -47,7 +47,6 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
     //   );
     // };
     const formatMessage = (message) => {
-      // const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|(?:```((?:.|\n)*?)```)/g;
       const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|```((?:.|\n)*?)```|\[web\]((?:.|\n)*?)\[\/web\]/g;
 
       const parts = message.split(linkRegex);
