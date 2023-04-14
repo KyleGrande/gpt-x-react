@@ -240,7 +240,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
     return (
       <div className="Chat-Instance">
         <div id="chat-container">
-          <h1>GPT-X (Alpha)</h1>
+          <h1>Babbage (Alpha)</h1>
           <div id="chat-area" ref={chatAreaRef}>
             {/* {messages.map((msg, index) => (
               <p key={index} className={`${msg.sender.toLowerCase()}-message`}>
@@ -283,7 +283,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
         <div className="handle" onMouseDown={onMouseDown}></div>
         <div id="interpreter-container">
           <h1 id="python-title">
-            Python Interpreter
+            Code
           </h1>
           <div id="interpreter-area">
             {snippetIndex >= 0 && (
@@ -292,7 +292,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
             </SyntaxHighlighter>
             )}
           </div>
-          <h2>Interpreter Output</h2>
+          <h2>Console</h2>
           <div id="interpreter-output">
             {snippetIndex >= 0 && (
               <SyntaxHighlighter language="bash" style={agate}>

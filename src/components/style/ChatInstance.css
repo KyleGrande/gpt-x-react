@@ -24,23 +24,30 @@
 
 }
 #chat-container h1{
-  padding: 10px;
-  overflow-x: hidden;
+  padding: 15px;
+  overflow: hidden;
   white-space: normal;
+  margin-top: 0px;
 }
 
 #interpreter-container h1,
 #interpreter-container h2 {
-  padding: 10px;
-  margin-bottom: 10px;
-  /* overflow-x: hidden;
-  white-space: normal; */
+  padding: 15px;
+  margin-bottom: 5px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  white-space: normal;
+  margin-top: 0px;
+
 
 }
 
-#chat-area,
-#interpreter-area{
+#chat-area{
   height: 85%;
+}
+#interpreter-area{
+  height: 70%;
+
 }
 
 #chat-area,
@@ -56,7 +63,9 @@
 #interpreter-area,
 #interpreter-output{
   font-size:14px;
-  padding-bottom: 0px;
+  /* padding-bottom: 0px; */
+  overflow-x: hidden;
+  white-space: normal;
 }
 
 #chat-area{
@@ -181,4 +190,38 @@ label[for="file-input"]:hover {
 }
 .handle:hover {
   background-color: #9AE19D;
+}
+
+@media screen and (max-width: 768px) {
+  .App {
+    flex-direction: column;
+  }
+
+  .Sidebar-Container {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .ChatInstance-Container {
+    width: 100%;
+    height: calc(100% - 20px);
+    margin-top: 0;
+    margin-left: 20px;
+  }
+
+  .toggle-sidebar-btn {
+    display: block;
+    width: 20%;
+    height: 5%;
+  }
+  #interpreter-container, .handle{
+    display:none;
+  }
+  #chat-container{
+    width: 100%;
+  }
+  .App{
+
+  }
 }
