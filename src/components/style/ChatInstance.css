@@ -192,6 +192,7 @@ label[for="file-input"]:hover {
   background-color: #9AE19D;
 }
 
+<<<<<<< HEAD
 @media screen and (max-width: 768px) {
   .App {
     flex-direction: column;
@@ -224,4 +225,10 @@ label[for="file-input"]:hover {
   .App{
 
   }
+=======
+#interpreter-container::-webkit-scrollbar,#chat-container::-webkit-scrollbar,
+#chat-area::-webkit-scrollbar-track, #interpreter-area::-webkit-scrollbar-track, #interpreter-output::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track {
+  background-color: transparent; 
+
+>>>>>>> aea95903be7d69e0cf05c17607418d703b33dab7
 }
