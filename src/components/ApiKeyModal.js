@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ApiKeyModal.css';
+import './style/ApiKeyModal.css';
 
 function ApiKeyModal({ isOpen, onClose, onSave }) {
   const [apiKey, setApiKey] = useState('');

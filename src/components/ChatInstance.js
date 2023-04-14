@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import './style/ChatInstance.css';
 import axios from 'axios';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { agate } from 'react-syntax-highlighter/dist/esm/styles/hljs';
@@ -6,6 +7,7 @@ import python from 'react-syntax-highlighter/dist/esm/languages/hljs/python';
 import bash from 'react-syntax-highlighter/dist/esm/languages/hljs/bash';
 SyntaxHighlighter.registerLanguage('python', python);
 SyntaxHighlighter.registerLanguage('bash', bash);
+
 
 const ChatInstance = ({ uuid, apiKey, onDelete }) => {
   const [messages, setMessages] = useState([]);
@@ -209,6 +211,32 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
       }
     };
   
+    const onMouseDown = (e) => {
+      e.preventDefault();
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+    };
+    
+    const onMouseMove = (e) => {
+      const chatContainer = document.getElementById("chat-container");
+      const interpreterContainer = document.getElementById("interpreter-container");
+      const minWidth = 0; 
+          
+      // Calculate new widths based on the mouse position
+      const chatWidth = e.clientX - chatContainer.getBoundingClientRect().left;
+      const interpreterWidth = interpreterContainer.getBoundingClientRect().right - e.clientX;
+    
+      // Update container widths if they are greater than the minimum width
+      if (chatWidth > minWidth && interpreterWidth > minWidth) {
+        chatContainer.style.width = chatWidth + "%";
+        interpreterContainer.style.width = interpreterWidth + "%";
+      }
+    };
+    const onMouseUp = () => {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+
     return (
       <div className="Chat-Instance">
         <div id="chat-container">
@@ -252,19 +280,11 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
             {/* The Monitor Uploads functionality is not included, as it relies on features not supported by all browsers */}
           </form>
         </div>
+        <div className="handle" onMouseDown={onMouseDown}></div>
         <div id="interpreter-container">
           <h1 id="python-title">
             Python Interpreter
-            <div>
-              <button id="previous-code" onClick={goToPreviousCode}>
-                Previous Code
-              </button>
-              <button id="next-code" onClick={goToNextCode}>
-                Next Code
-              </button>
-            </div>
           </h1>
-  
           <div id="interpreter-area">
             {snippetIndex >= 0 && (
               <SyntaxHighlighter language="python" style={agate}>
@@ -281,9 +301,18 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
   
             )}
           </div>
+          <div className='snippet-btns'>
+              <button id="previous-code" onClick={goToPreviousCode}>
+                Previous Code
+              </button>
+              <button id="next-code" onClick={goToNextCode}>
+                Next Code
+              </button>
+            </div>
         </div>
       </div>
     );
   }
+
 
 export default ChatInstance;

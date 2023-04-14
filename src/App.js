@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import ChatInstance from './components/ChatInstance';
 import ApiKeyModal from './components/ApiKeyModal';
+import Sidebar from './components/Sidebar';
 import axios from 'axios'; // Import the ApiKeyModal component
 import { v4 as uuidv4 } from 'uuid';
 
@@ -96,54 +97,30 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={toggleSidebarVisibility} className='toggle-sidebar-btn'>
-       
-      </button>
-      <div className='sidebar-container' style={{ display: isSidebarVisible ? 'block' : 'none' }}>
-        <div className="sidebar">
-          <h2>Instances</h2>
-          <button onClick={createNewChatInstance}>init Instance</button>
-          <div className='instances-container'>
-          {chatInstances.map((instance) => (
-            <p
-              key={instance.id}
-              className={activeChat === instance.id ? 'active-chat' : ''}
-              onClick={() => setActiveChatInstance(instance.id)}
-            >
-              <button
-                className='delete-instance-btn'
-                onClick={() => deleteChatInstance(instance.id)}
-              >
-                X
-              </button>
-              Instance {instance.number}
-            </p>
-          ))}
-          </div>
-        </div>
+      <button onClick={toggleSidebarVisibility} className='toggle-sidebar-btn'></button>
+      <div className='Sidebar-Container' style={{ display: isSidebarVisible ? 'block' : 'none' }}>
+        <Sidebar
+          chatInstances={chatInstances}
+          activeChat={activeChat}
+          setActiveChatInstance={setActiveChatInstance}
+          createNewChatInstance={createNewChatInstance}
+          deleteChatInstance={deleteChatInstance}
+        />
       </div>
-      <div className="chat-container">
-      {hasChatInstances ? (
-            chatInstances.map((instance) => (
-              <div
-                key={instance.id}
-                style={{ display: activeChat === instance.id ? 'block' : 'none' }}
-              >
-                <ChatInstance
-                  uuid={instance.id}
-                  apiKey={apiKey}
-                  onDelete={() => deleteChatInstance(instance.id)}
-                />
-              </div>
-            ))
-          ) : (
-          <div className="placeholder-screen">
-            <h1>GPT-Xpensive.</h1>
-            <p>initalize_instance()</p>
+      <div className="ChatInstance-Container">
+        {chatInstances.map((instance) => (
+          <div
+            key={instance.id}
+            style={{ display: activeChat === instance.id ? 'block' : 'none' }}
+          >
+            <ChatInstance
+              uuid={instance.id}
+              apiKey={apiKey}
+              onDelete={() => deleteChatInstance(instance.id)}
+            />
           </div>
-        )}
+        ))}
       </div>
-
       {isApiKeyModalOpen && (
         <ApiKeyModal
           isOpen={isApiKeyModalOpen}
