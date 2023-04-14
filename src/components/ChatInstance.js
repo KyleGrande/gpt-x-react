@@ -47,7 +47,8 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
     //   );
     // };
     const formatMessage = (message) => {
-      const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|(?:```((?:.|\n)*?)```)/g;
+      // const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|(?:```((?:.|\n)*?)```)/g;
+      const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|```((?:.|\n)*?)```|\[web\]((?:.|\n)*?)\[\/web\]/g;
 
       const parts = message.split(linkRegex);
       const matches = Array.from(message.matchAll(linkRegex));
@@ -59,6 +60,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
               const linkMatch = matches[index][1];
               const imgMatch = matches[index][2];
               const codeMatch = matches[index][3];
+              const webMatch = matches[index][4];
     
               if (linkMatch) {
                 const filePath = linkMatch;
@@ -90,9 +92,9 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
                 );
               } else if (codeMatch) {
                 const codeSnippet = codeMatch;
-                //get the index of the imagematch in the original parts array
+                //get the index of the codematch in the original parts array
                 const codeIndex = parts.indexOf(codeMatch);
-                //delete the image match from the parts array
+                //delete the codematch match from the parts array
                 parts.splice(codeIndex, 1);
                 return (
                   <React.Fragment key={index}>
@@ -100,6 +102,25 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
                     <SyntaxHighlighter language="python" style={agate}>
                       {codeSnippet}
                     </SyntaxHighlighter>
+                  </React.Fragment>
+                );
+              } else if (webMatch) {
+                let webLink = webMatch;
+                // Check if the link starts with http:// or https://
+                if (!webLink.startsWith('http://') && !webLink.startsWith('https://')) {
+                  // Add the http:// protocol
+                  webLink = 'http://' + webLink;
+                }
+                //get the index of the weblink in the original parts array
+                const webIndex = parts.indexOf(webMatch);
+                //delete the weblink match from the parts array
+                parts.splice(webIndex, 1);
+                return (
+                  <React.Fragment key={index}>
+                    {part}
+                    <a href={webLink} target="_blank" rel="external noopener noreferrer">
+                      {webLink}
+                    </a>
                   </React.Fragment>
                 );
               }
