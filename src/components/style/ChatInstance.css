@@ -32,9 +32,9 @@
 #interpreter-container h1,
 #interpreter-container h2 {
   padding: 10px;
-  margin-bottom: 0px;
-  overflow-x: hidden;
-  white-space: normal;
+  margin-bottom: 10px;
+  /* overflow-x: hidden;
+  white-space: normal; */
 
 }
 
