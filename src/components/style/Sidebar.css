@@ -129,3 +129,9 @@ button:hover {
   transition: background-color 3.0s ease-in-out;
   background-color: rgba(154, 225, 157, 1); 
 }
+
+@media screen and (max-width: 768px) {
+  .sidebar{    
+    display: none;
+  }
+}

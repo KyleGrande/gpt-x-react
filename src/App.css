@@ -57,35 +57,37 @@
     flex-direction: column;
     overflow: hidden;
     width: 100vw;
-    height: 100vh;
+    height: 85vh;
     overflow-y: hidden;
+    margin: 0px;
+    padding: 0px;
+    
   }
 
   .Sidebar-Container {
     width: 100%;
     height: auto;
     margin-bottom: 20px;
+    display: none;
   }
+ 
 
   .toggle-sidebar-btn {
     display: block;
     width: 20%;
     height: 5%;
+    display: none;
     /* display:none; */
   }
   #interpreter-container, .handle{
     display:none;
   }
   .ChatInstance-Container{
+    /* width: 100%;
     overflow-y: scroll;
-    overflow: hidden;
-
-  }
-  .Chat-Instance{
-    width:95%;
-    overflow: hidden;
-
-    /* max-height: 70%; */
+    overflow: hidden; */
+    margin: 0px;
+    padding: 0px;
   }
 
 }

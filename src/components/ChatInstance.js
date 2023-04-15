@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './style/ChatInstance.css';
 import axios from 'axios';
+import Interpreter from './Interpreter';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { agate } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import python from 'react-syntax-highlighter/dist/esm/languages/hljs/python';
 import bash from 'react-syntax-highlighter/dist/esm/languages/hljs/bash';
 SyntaxHighlighter.registerLanguage('python', python);
 SyntaxHighlighter.registerLanguage('bash', bash);
+
 
 
 const ChatInstance = ({ uuid, apiKey, onDelete }) => {
@@ -21,33 +23,6 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }, [messages]);
     
-    // //TEST
-    // const formatMessage = (message) => {
-    //   const linkRegex = /\[link\](.*?)\[\/link\]/g;
-    //   const parts = message.split(linkRegex);
-    //   const matches = Array.from(message.matchAll(linkRegex));
-    
-    //   return (
-    //     <>
-    //       {parts.map((part, index) => {
-    //         if (index < matches.length) {
-    //           const filePath = matches[index][1];
-    //           const fileName = filePath.split('/').pop();
-    //           const fileURL = process.env.PUBLIC_URL + filePath;
-    //           return (
-    //             <React.Fragment key={index}>
-    //               {part}
-    //               <a href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
-    //                 {fileName}
-    //               </a>
-    //             </React.Fragment>
-    //           );
-    //         }
-    //         return part;
-    //       })}
-    //     </>
-    //   );
-    // };
     const formatMessage = (message) => {
       const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|```((?:.|\n)*?)```|\[web\]((?:.|\n)*?)\[\/web\]/g;
 
@@ -281,7 +256,13 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
           </form>
         </div>
         <div className="handle" onMouseDown={onMouseDown}></div>
-        <div id="interpreter-container">
+        <Interpreter
+      codeSnippets={codeSnippets}
+      snippetIndex={snippetIndex}
+      goToPreviousCode={goToPreviousCode}
+      goToNextCode={goToNextCode}
+    />
+        {/* <div id="interpreter-container">
           <h1 id="python-title">
             Code
           </h1>
@@ -309,7 +290,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
                 Next Code
               </button>
             </div>
-        </div>
+        </div> */}
       </div>
     );
   }
