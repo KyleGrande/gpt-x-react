@@ -25,13 +25,23 @@ function App() {
 
   const handleSaveApiKey = (key) => {
     setApiKey(key);
-    sendApiKeyToBackend(key);
-    sendUUIDToBackend(initialChatInstanceId); // Send the initial UUID after the API key is saved
+    // sendApiKeyToBackend(key);
+    sendUUIDToBackend(initialChatInstanceId, key); // Send the initial UUID after the API key is saved
   };
 
   // ... rest of the code
 
 
+  // const createNewChatInstance = () => {
+  //   const newId = uuidv4();
+  //   const newNumber = chatInstances.length + 1;
+  //   setChatInstances((prevInstances) => [
+  //     ...prevInstances,
+  //     { id: newId, number: newNumber },
+  //   ]);
+  //   setActiveChat(newId);
+  //   sendUUIDToBackend(newId);
+  // };
   const createNewChatInstance = () => {
     const newId = uuidv4();
     const newNumber = chatInstances.length + 1;
@@ -40,7 +50,7 @@ function App() {
       { id: newId, number: newNumber },
     ]);
     setActiveChat(newId);
-    sendUUIDToBackend(newId);
+    sendUUIDToBackend(newId, apiKey); // Pass the apiKey here
   };
   
 
@@ -87,9 +97,10 @@ function App() {
     }
   }; 
 
-  const sendUUIDToBackend = async (uuid) => {
+  const sendUUIDToBackend = async (uuid, key) => {
+    console.log('Sending API key:', key);
     try {
-      await axios.post('http://localhost:5001/save_uuid', { uuid: uuid });
+      await axios.post('http://localhost:5001/save_uuid', { uuid: uuid, apiKey: key });
     } catch (error) {
       console.error('Error sending API key:', error);
     }
