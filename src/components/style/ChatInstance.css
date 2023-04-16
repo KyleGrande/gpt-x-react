@@ -8,7 +8,7 @@
   overflow: hidden;
 }
   
-#interpreter-container, #chat-container {
+.interpreter-container, .chat-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -23,15 +23,15 @@
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 
 }
-#chat-container h1{
+.chat-container h1{
   padding: 15px;
   overflow: hidden;
   white-space: normal;
   margin-top: 0px;
 }
 
-#interpreter-container h1,
-#interpreter-container h2 {
+.interpreter-container h1,
+.interpreter-container h2 {
   padding: 15px;
   margin-bottom: 5px;
   overflow-x: hidden;
@@ -157,18 +157,18 @@ label[for="file-input"]:hover {
 .assistant-message-after-res2 {
   color: white;
 }
-#interpreter-container::-webkit-scrollbar,#chat-container::-webkit-scrollbar,
+.interpreter-container::-webkit-scrollbar,.chat-container::-webkit-scrollbar,
 #chat-area::-webkit-scrollbar, #interpreter-area::-webkit-scrollbar, #interpreter-output::-webkit-scrollbar, .sidebar::-webkit-scrollbar {
   width: 6px; 
   max-height: 0px; 
 
 }
-#interpreter-container::-webkit-scrollbar,#chat-container::-webkit-scrollbar,
+.interpreter-container::-webkit-scrollbar,.chat-container::-webkit-scrollbar,
 #chat-area::-webkit-scrollbar-track, #interpreter-area::-webkit-scrollbar-track, #interpreter-output::-webkit-scrollbar-track, .sidebar::-webkit-scrollbar-track {
   background-color: none; 
 
 }
-#interpreter-container::-webkit-scrollbar-thumb,#chat-container::-webkit-scrollbar-thumb,
+.interpreter-container::-webkit-scrollbar-thumb,.chat-container::-webkit-scrollbar-thumb,
 #chat-area::-webkit-scrollbar-thumb, #interpreter-area::-webkit-scrollbar-thumb, #interpreter-output::-webkit-scrollbar-thumb, .sidebar::-webkit-scrollbar-thumb {
   background-color: rgba(154, 225, 157, 0); 
   transition: background-color 3.0s ease-in-out;
@@ -194,7 +194,7 @@ label[for="file-input"]:hover {
 
 @media screen and (max-width: 768px) {
 
-  #interpreter-container, .handle{
+  .interpreter-container, .handle{
     display:none;
   }
   .ChatInstance-Container{
@@ -216,7 +216,7 @@ label[for="file-input"]:hover {
     /* margin-right: 0px; */
     /* max-height: 70%; */
   }
-  #chat-container{
+  .chat-container{
     height: 85%;
     /* max-height: 100%; */
     /* overflow-y: hidden; */

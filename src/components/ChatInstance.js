@@ -186,15 +186,28 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
       }
     };
   
-    const onMouseDown = (e) => {
+    // const onMouseDown = (e) => {
+    //   e.preventDefault();
+    //   document.addEventListener("mousemove", onMouseMove);
+    //   document.addEventListener("mouseup", onMouseUp);
+    // };
+    
+    // const onMouseMove = (e) => {
+    //   const chatContainer = document.getElementById("chat-container");
+    //   const interpreterContainer = document.getElementById("interpreter-container");
+    const onMouseDown = (e, uuid) => {
       e.preventDefault();
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
+      const onMouseMoveWrapper = (e) => onMouseMove(e, uuid);
+      document.addEventListener("mousemove", onMouseMoveWrapper);
+      document.addEventListener("mouseup", () => {
+        document.removeEventListener("mousemove", onMouseMoveWrapper);
+        document.removeEventListener("mouseup", onMouseUp);
+      });
     };
     
-    const onMouseMove = (e) => {
-      const chatContainer = document.getElementById("chat-container");
-      const interpreterContainer = document.getElementById("interpreter-container");
+    const onMouseMove = (e, uuid) => {
+      const chatContainer = document.getElementById(`chat-container-${uuid}`);
+      const interpreterContainer = document.getElementById(`interpreter-container-${uuid}`);
       const minWidth = 0; 
           
       // Calculate new widths based on the mouse position
@@ -214,7 +227,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
 
     return (
       <div className="Chat-Instance">
-        <div id="chat-container">
+      <div className={`chat-container`} id={`chat-container-${uuid}`}>
           <h1>Babbage (Alpha)</h1>
           <div id="chat-area" ref={chatAreaRef}>
             {/* {messages.map((msg, index) => (
@@ -255,8 +268,9 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
             {/* The Monitor Uploads functionality is not included, as it relies on features not supported by all browsers */}
           </form>
         </div>
-        <div className="handle" onMouseDown={onMouseDown}></div>
+        <div className={`handle handle-${uuid}`} onMouseDown={(e) => onMouseDown(e, uuid)}></div>
         <Interpreter
+        uuid={uuid}
       codeSnippets={codeSnippets}
       snippetIndex={snippetIndex}
       goToPreviousCode={goToPreviousCode}

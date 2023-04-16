@@ -6,9 +6,9 @@ import bash from 'react-syntax-highlighter/dist/esm/languages/hljs/bash';
 SyntaxHighlighter.registerLanguage('python', python);
 SyntaxHighlighter.registerLanguage('bash', bash);
 
-const Interpreter = ({ codeSnippets, snippetIndex, goToPreviousCode, goToNextCode }) => {
+const Interpreter = ({ uuid, codeSnippets, snippetIndex, goToPreviousCode, goToNextCode }) => {
   return (
-    <div id="interpreter-container">
+    <div className={'interpreter-container'} id={`interpreter-container-${uuid}`}>
       <h1 id="python-title">Code</h1>
       <div id="interpreter-area">
         {snippetIndex >= 0 && (
