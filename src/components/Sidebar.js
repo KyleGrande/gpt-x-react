@@ -11,8 +11,8 @@ function Sidebar({
 }) {
   return (
     <div className="sidebar">
-      <h2>Instances</h2>
-      <button className='init-btn' onClick={createNewChatInstance}>init Instance</button>
+      <h2>CoLabs</h2>
+      <button className='init-btn' onClick={createNewChatInstance}>Create CoLab</button>
       <div className='instances-container'>
         {chatInstances.map((instance) => (
           <p
@@ -26,7 +26,7 @@ function Sidebar({
             >
               X
             </button>
-            Instance {instance.number}
+            CoLab {instance.number}
           </p>
         ))}
       </div>

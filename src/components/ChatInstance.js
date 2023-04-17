@@ -304,7 +304,7 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
             <input
               type="text"
               id="user-input"
-              placeholder='if __begin__ == __"convo"__: intialize_instance()'
+              placeholder='Babbage is listening...'
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
             />
