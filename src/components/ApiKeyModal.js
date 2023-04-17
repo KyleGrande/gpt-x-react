@@ -16,7 +16,7 @@ function ApiKeyModal({ isOpen, onClose, onSave }) {
   return (
     <div className="api-key-modal">
       <div className="modal-content">
-        <h2>const apiKey = osenv.get('API_KEY');</h2>
+        <h2>Enter Your <a href='https://platform.openai.com/account/api-keys'>OpenAI</a> Key</h2>
         <input
           type="password"
           value={apiKey}
