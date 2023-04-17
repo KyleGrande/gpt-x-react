@@ -23,90 +23,149 @@ const ChatInstance = ({ uuid, apiKey, onDelete }) => {
       chatAreaRef.current.scrollTop = chatAreaRef.current.scrollHeight;
     }, [messages]);
     
+    // const formatMessage = (message) => {
+    //   const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|```((?:.|\n)*?)```|\[web\]((?:.|\n)*?)\[\/web\]/g;
+
+    //   const parts = message.split(linkRegex);
+    //   const matches = Array.from(message.matchAll(linkRegex));
+    
+    //   return (
+    //     <>
+    //       {parts.map((part, index) => {
+    //         if (index < matches.length) {
+    //           const linkMatch = matches[index][1];
+    //           const imgMatch = matches[index][2];
+    //           const codeMatch = matches[index][3];
+    //           const webMatch = matches[index][4];
+    
+    //           if (linkMatch) {
+    //             const filePath = linkMatch;
+    //             const fileName = filePath.split('/').pop(); //Fix this eventually
+    //             const fileURL = process.env.PUBLIC_URL + filePath;
+    //             //get the index of the linkmatch in the original parts array
+    //             const linkIndex = parts.indexOf(linkMatch);
+    //             //delete the link match from the parts array
+    //             parts.splice(linkIndex, 1);
+    //             return (
+    //               <React.Fragment key={index}>
+    //                 {part}
+    //                 <a href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
+    //                   {fileName}
+    //                 </a>
+    //               </React.Fragment>
+    //             );
+    //           } else if (imgMatch) {
+    //             const imgSrc = imgMatch;
+    //             //get the index of the imagematch in the original parts array
+    //             const imgIndex = parts.indexOf(imgMatch);
+    //             //delete the image match from the parts array
+    //             parts.splice(imgIndex, 1);
+    //             return (
+    //               <React.Fragment key={index}>
+    //                 {part}
+    //                 <img src={imgSrc} alt="" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+    //               </React.Fragment>
+    //             );
+    //           } else if (codeMatch) {
+    //             const codeSnippet = codeMatch;
+    //             //get the index of the codematch in the original parts array
+    //             const codeIndex = parts.indexOf(codeMatch);
+    //             //delete the codematch match from the parts array
+    //             parts.splice(codeIndex, 1);
+    //             return (
+    //               <React.Fragment key={index}>
+    //                 {part}
+    //                 <SyntaxHighlighter language="bash" style={agate}>
+    //                   {codeSnippet}
+    //                 </SyntaxHighlighter>
+    //               </React.Fragment>
+    //             );
+    //           } else if (webMatch) {
+    //             let webLink = webMatch;
+    //             // Check if the link starts with http:// or https://
+    //             if (!webLink.startsWith('http://') && !webLink.startsWith('https://')) {
+    //               // Add the http:// protocol
+    //               webLink = 'http://' + webLink;
+    //             }
+    //             //get the index of the weblink in the original parts array
+    //             const webIndex = parts.indexOf(webMatch);
+    //             //delete the weblink match from the parts array
+    //             parts.splice(webIndex, 1);
+    //             return (
+    //               <React.Fragment key={index}>
+    //                 {part}
+    //                 <a href={webLink} target="_blank" rel="external noopener noreferrer">
+    //                   {webLink}
+    //                 </a>
+    //               </React.Fragment>
+    //             );
+    //           }
+    //         }
+    //         return part;
+    //       })}
+    //     </>
+    //   );
+    // };
     const formatMessage = (message) => {
       const linkRegex = /\[link\]((?:.|\n)*?)\[\/link\]|\[img\]((?:.|\n)*?)\[\/img\]|```((?:.|\n)*?)```|\[web\]((?:.|\n)*?)\[\/web\]/g;
-
-      const parts = message.split(linkRegex);
+    
       const matches = Array.from(message.matchAll(linkRegex));
+      let lastIndex = 0;
+      const formattedMessage = [];
     
-      return (
-        <>
-          {parts.map((part, index) => {
-            if (index < matches.length) {
-              const linkMatch = matches[index][1];
-              const imgMatch = matches[index][2];
-              const codeMatch = matches[index][3];
-              const webMatch = matches[index][4];
+      matches.forEach((match, index) => {
+        const [fullMatch, linkMatch, imgMatch, codeMatch, webMatch] = match;
+        const matchIndex = match.index;
     
-              if (linkMatch) {
-                const filePath = linkMatch;
-                const fileName = filePath.split('/').pop(); //Fix this eventually
-                const fileURL = process.env.PUBLIC_URL + filePath;
-                //get the index of the linkmatch in the original parts array
-                const linkIndex = parts.indexOf(linkMatch);
-                //delete the link match from the parts array
-                parts.splice(linkIndex, 1);
-                return (
-                  <React.Fragment key={index}>
-                    {part}
-                    <a href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
-                      {fileName}
-                    </a>
-                  </React.Fragment>
-                );
-              } else if (imgMatch) {
-                const imgSrc = imgMatch;
-                //get the index of the imagematch in the original parts array
-                const imgIndex = parts.indexOf(imgMatch);
-                //delete the image match from the parts array
-                parts.splice(imgIndex, 1);
-                return (
-                  <React.Fragment key={index}>
-                    {part}
-                    <img src={imgSrc} alt="" style={{ maxWidth: '100%', maxHeight: '300px' }} />
-                  </React.Fragment>
-                );
-              } else if (codeMatch) {
-                const codeSnippet = codeMatch;
-                //get the index of the codematch in the original parts array
-                const codeIndex = parts.indexOf(codeMatch);
-                //delete the codematch match from the parts array
-                parts.splice(codeIndex, 1);
-                return (
-                  <React.Fragment key={index}>
-                    {part}
-                    <SyntaxHighlighter language="bash" style={agate}>
-                      {codeSnippet}
-                    </SyntaxHighlighter>
-                  </React.Fragment>
-                );
-              } else if (webMatch) {
-                let webLink = webMatch;
-                // Check if the link starts with http:// or https://
-                if (!webLink.startsWith('http://') && !webLink.startsWith('https://')) {
-                  // Add the http:// protocol
-                  webLink = 'http://' + webLink;
-                }
-                //get the index of the weblink in the original parts array
-                const webIndex = parts.indexOf(webMatch);
-                //delete the weblink match from the parts array
-                parts.splice(webIndex, 1);
-                return (
-                  <React.Fragment key={index}>
-                    {part}
-                    <a href={webLink} target="_blank" rel="external noopener noreferrer">
-                      {webLink}
-                    </a>
-                  </React.Fragment>
-                );
-              }
-            }
-            return part;
-          })}
-        </>
-      );
+        // Add any text before the current match
+        if (matchIndex > lastIndex) {
+          formattedMessage.push(message.substring(lastIndex, matchIndex));
+        }
+    
+        if (linkMatch) {
+          const filePath = linkMatch;
+          const fileName = filePath.split('/').pop();
+          const fileURL = process.env.PUBLIC_URL + filePath;
+          formattedMessage.push(
+            <a key={index} href={fileURL} download={fileName} target="_blank" rel="noopener noreferrer">
+              {fileName}
+            </a>
+          );
+        } else if (imgMatch) {
+          const imgSrc = imgMatch;
+          formattedMessage.push(
+            <img key={index} src={imgSrc} alt="" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+          );
+        } else if (codeMatch) {
+          const codeSnippet = codeMatch;
+          formattedMessage.push(
+            <SyntaxHighlighter key={index} language="bash" style={agate}>
+              {codeSnippet}
+            </SyntaxHighlighter>
+          );
+        } else if (webMatch) {
+          let webLink = webMatch;
+          if (!webLink.startsWith('http://') && !webLink.startsWith('https://')) {
+            webLink = 'http://' + webLink;
+          }
+          formattedMessage.push(
+            <a key={index} href={webLink} target="_blank" rel="external noopener noreferrer">
+              {webLink}
+            </a>
+          );
+        }
+    
+        lastIndex = matchIndex + fullMatch.length;
+      });
+    
+      // Add any remaining text after the last match
+      if (lastIndex < message.length) {
+        formattedMessage.push(message.substring(lastIndex));
+      }
+    
+      return <>{formattedMessage}</>;
     };
-
+    
 
     const sendMessage = async (e) => {
       e.preventDefault();
