@@ -90,7 +90,7 @@ function App() {
     console.log('Sending userid:',cognitoUserId)
     try {
 
-      await axios.post('https://45vnr27amf.execute-api.us-east-1.amazonaws.com/prodstoreapikey', { cognito_user_id: cognitoUserId, user_api_key: key});
+      await axios.post('https://45vnr27amf.execute-api.us-east-1.amazonaws.com/prod/storeapikey', { cognito_user_id: cognitoUserId, user_api_key: key});
     } catch (error) {
       console.error('Error sending API key:', error);
     }
