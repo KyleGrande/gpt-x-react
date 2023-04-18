@@ -99,8 +99,8 @@ const LoginForm = ({ onLogin }) => {
     e.preventDefault();
     try {
       const { idToken, accessToken } = await loginUser(email, password);
-      const cognitoUserId = idToken.payload.sub; // Get the "sub" attribute from the ID token payload
-      onLogin(idToken.jwtToken, accessToken.jwtToken, cognitoUserId); // Pass the Cognito user ID to the callback
+      const cognitoUserId = userPool.getCurrentUser().getUsername(); // Get the Cognito user ID
+      onLogin(idToken, accessToken, cognitoUserId); // Pass the Cognito user ID to the callback
     } catch (error) {
       console.error('Error during authentication:', error);
     }
@@ -149,7 +149,6 @@ const handleVerification = async (e) => {
   e.preventDefault();
     try {
       await confirmRegistration(email, verificationCode);
-      // const cognitoUserId = idToken.payload.sub; // Get the "sub" attribute from
       onLogin();
     } catch (error) {
       console.error('Error during verification:', error);
