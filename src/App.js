@@ -36,8 +36,10 @@ function App() {
     if (idToken && accessToken && userId) {
       setIsLoggedIn(true);
       setCognitoUserId(userId);
+      console.log("cognitoUserId updated in useEffect:", userId); // Add this line
     }
   }, []);
+  
   
 
   
@@ -77,17 +79,18 @@ function App() {
   
 
   const handleSaveApiKey = (key) => {
+    console.log("cognitoUserId in handleSaveApiKey:", cognitoUserId); // Add this line
     console.log("API key received in handleSaveApiKey:", key);
-    sendApiKeyToBackend(key)
+    sendApiKeyToBackend(key, cognitoUserId);
     setApiKey(key);
-    // send api key to backend with cognito id?
-
-    // createNewChatInstance(); // Create the first chat instance after saving the API key
   };
-  const sendApiKeyToBackend = async ( key, userId) => {
+  
+  const sendApiKeyToBackend = async ( key  ) => {
     console.log('Sending API key:', key);
+    console.log('Sending userid:',cognitoUserId)
     try {
-      await axios.post('https://45vnr27amf.execute-api.us-east-1.amazonaws.com/prodstoreapikey', { cognito_user_id: userId, user_api_key: key});
+
+      await axios.post('https://45vnr27amf.execute-api.us-east-1.amazonaws.com/prodstoreapikey', { cognito_user_id: cognitoUserId, user_api_key: key});
     } catch (error) {
       console.error('Error sending API key:', error);
     }
