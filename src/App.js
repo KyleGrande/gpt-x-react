@@ -25,15 +25,20 @@ function App() {
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(true);
   const [hasChatInstances, setHasChatInstances] = useState(true);
   const [isSplashVisible, setIsSplashVisible] = useState(false);
+  const [cognitoUserId, setCognitoUserId] = useState(null);
 
+  
   useEffect(() => {
     const idToken = localStorage.getItem("idToken");
     const accessToken = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("cognitoUserId");
   
-    if (idToken && accessToken) {
+    if (idToken && accessToken && userId) {
       setIsLoggedIn(true);
+      setCognitoUserId(userId);
     }
   }, []);
+  
 
   
   // useEffect(() => {
@@ -52,14 +57,17 @@ function App() {
   
   // const [isSplashPageVisible, setIsSplashPageVisible] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const handleLogin = (idToken, accessToken) => {
-    // Save the tokens to local storage
+  const handleLogin = (idToken, accessToken, userId) => {
+    // Save the tokens and user ID to local storage
     localStorage.setItem("idToken", idToken);
     localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("cognitoUserId", userId);
   
-    // Set the isLoggedIn state
+    // Set the isLoggedIn and cognitoUserId states
     setIsLoggedIn(true);
+    setCognitoUserId(userId);
   };
+  
   const handleLogout = () => {
     localStorage.removeItem("idToken");
     localStorage.removeItem("accessToken");
@@ -70,10 +78,20 @@ function App() {
 
   const handleSaveApiKey = (key) => {
     console.log("API key received in handleSaveApiKey:", key);
+    sendApiKeyToBackend(key)
     setApiKey(key);
+    // send api key to backend with cognito id?
+
     // createNewChatInstance(); // Create the first chat instance after saving the API key
   };
-
+  const sendApiKeyToBackend = async ( key, userId) => {
+    console.log('Sending API key:', key);
+    try {
+      await axios.post('https://45vnr27amf.execute-api.us-east-1.amazonaws.com/prodstoreapikey', { cognito_user_id: userId, user_api_key: key});
+    } catch (error) {
+      console.error('Error sending API key:', error);
+    }
+  };
   // ... rest of the code
 
 
