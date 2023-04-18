@@ -54,13 +54,17 @@
   text-align: center;
 } */
 .sidebar{
+background-color: #474A48;
+border-radius: 10px;
+
 display: flex;
 flex-direction: column;
 text-align: center;
-
+height: 75vh;
+margin-bottom: 1vh;
 }
 .instances-container{
-  
+  overflow: scroll;
 }
 
 .init-btn
@@ -107,24 +111,24 @@ button:hover {
 .instances-container p:hover .delete-instance-btn{
   display: inline;
 } 
-.Sidebar-Container::-webkit-scrollbar {
+.instances-container::-webkit-scrollbar {
   width: 6px; 
   max-height: 0px; 
   background-color: none;
 
 }
 
-.Sidebar-Container::-webkit-scrollbar-track {
+.instances-container::-webkit-scrollbar-track {
   background-color: transparent; 
 
 }
 
-.Sidebar-Container::-webkit-scrollbar-thumb {
+.instances-container::-webkit-scrollbar-thumb {
   background-color: rgba(154, 225, 157, 0); 
   transition: background-color 3.0s ease-in-out;
       }
 
-.Sidebar-Container:hover::-webkit-scrollbar-thumb, .Sidebar-Container:active::-webkit-scrollbar-thumb, .Sidebar-Container::-webkit-scrollbar-thumb {
+.instances-container:hover::-webkit-scrollbar-thumb, .instances-container:active::-webkit-scrollbar-thumb, .instances-container::-webkit-scrollbar-thumb {
 
   transition: background-color 3.0s ease-in-out;
   background-color: rgba(154, 225, 157, 1); 
