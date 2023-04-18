@@ -3,30 +3,75 @@ import './App.css';
 import ChatInstance from './components/ChatInstance';
 import ApiKeyModal from './components/ApiKeyModal';
 import Sidebar from './components/Sidebar';
+import UserAuth from './components/UserAuth';
+import SplashPage from './components/SplashPage'; // Import the SplashPage component
 import axios from 'axios'; // Import the ApiKeyModal component
 import { v4 as uuidv4 } from 'uuid';
+ // Import the Auth component
+
 
 
 
 function App() {
-  const initialChatInstanceId = uuidv4();
-  const [chatInstances, setChatInstances] = useState([
-    { id: initialChatInstanceId, number: 1 },
-  ]);
-  const [activeChat, setActiveChat] = useState(initialChatInstanceId);
+  // const initialChatInstanceId = uuidv4();
+  // const [chatInstances, setChatInstances] = useState([
+  //   { id: initialChatInstanceId, number: 1 },
+  // ]);
+  const [chatInstances, setChatInstances] = useState([]);
+
+  const [activeChat, setActiveChat] = useState(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [apiKey, setApiKey] = useState('');
   const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(true);
   const [hasChatInstances, setHasChatInstances] = useState(true);
+  const [isSplashVisible, setIsSplashVisible] = useState(false);
 
   useEffect(() => {
+    const idToken = localStorage.getItem("idToken");
+    const accessToken = localStorage.getItem("accessToken");
+  
+    if (idToken && accessToken) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  
+  // useEffect(() => {
+  //   setHasChatInstances(chatInstances.length > 0);
+  // }, [chatInstances]);
+  useEffect(() => {
     setHasChatInstances(chatInstances.length > 0);
+    setIsSplashVisible(chatInstances.length === 0);
   }, [chatInstances]);
+  
+  useEffect(() => {
+    if (apiKey) {
+      createNewChatInstance();
+    }
+  }, [apiKey]);
+  
+  // const [isSplashPageVisible, setIsSplashPageVisible] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleLogin = (idToken, accessToken) => {
+    // Save the tokens to local storage
+    localStorage.setItem("idToken", idToken);
+    localStorage.setItem("accessToken", accessToken);
+  
+    // Set the isLoggedIn state
+    setIsLoggedIn(true);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("idToken");
+    localStorage.removeItem("accessToken");
+    setIsLoggedIn(false);
+  };
+  
+  
 
   const handleSaveApiKey = (key) => {
+    console.log("API key received in handleSaveApiKey:", key);
     setApiKey(key);
-    // sendApiKeyToBackend(key);
-    sendUUIDToBackend(initialChatInstanceId, key); // Send the initial UUID after the API key is saved
+    // createNewChatInstance(); // Create the first chat instance after saving the API key
   };
 
   // ... rest of the code
@@ -43,6 +88,7 @@ function App() {
   //   sendUUIDToBackend(newId);
   // };
   const createNewChatInstance = () => {
+    console.log("API key in createNewChatInstance:", apiKey);
     const newId = uuidv4();
     const newNumber = chatInstances.length + 1;
     setChatInstances((prevInstances) => [
@@ -50,8 +96,9 @@ function App() {
       { id: newId, number: newNumber },
     ]);
     setActiveChat(newId);
-    sendUUIDToBackend(newId, apiKey); // Pass the apiKey here
+    sendUUIDToBackend(newId, apiKey);
   };
+  
   
 
   const setActiveChatInstance = (id) => {
@@ -89,13 +136,13 @@ function App() {
     setIsSidebarVisible(!isSidebarVisible);
   };
 
-  const sendApiKeyToBackend = async (key) => {
-    try {
-      await axios.post('http://localhost:5001/save_api_key', { apiKey: key });
-    } catch (error) {
-      console.error('Error sending API key:', error);
-    }
-  }; 
+  // const sendApiKeyToBackend = async (key) => {
+  //   try {
+  //     await axios.post('http://localhost:5001/save_api_key', { apiKey: key });
+  //   } catch (error) {
+  //     console.error('Error sending API key:', error);
+  //   }
+  // }; 
 
   const sendUUIDToBackend = async (uuid, key) => {
     console.log('Sending API key:', key);
@@ -106,6 +153,24 @@ function App() {
     }
   }; 
 
+  // const handleContinueFromSplash = () => {
+  //   setIsSplashPageVisible(false);
+  // };
+
+  // if (isSplashPageVisible) {
+  //   return (
+  //     <div className="App">
+  //       <SplashPage onContinue={handleContinueFromSplash} />
+  //     </div>
+  //   );
+  // }
+  if (!isLoggedIn) {
+    return (
+      <div className="App">
+        <UserAuth onLogin={handleLogin} />
+      </div>
+    );
+  }
   return (
     <div className="App">
       <button onClick={toggleSidebarVisibility} className='toggle-sidebar-btn'></button>
@@ -117,8 +182,21 @@ function App() {
           createNewChatInstance={createNewChatInstance}
           deleteChatInstance={deleteChatInstance}
         />
+        <div className='Sidebar-Container2'>
+        <button onClick={() => setIsApiKeyModalOpen(true)} className='add-api-key-btn'>Add API Key</button>
+        <a href="https://discord.gg/jArkwmxAFW" target="_blank" rel="noreferrer">
+          <button className='join-discord-btn'>Join Discord</button>
+        </a>
+                  {/* contact us button that is a link to email */}
+        <a href="mailto:contact@gptcolab.com" target="_blank" rel="noreferrer">
+          <button className='contact-us-btn'>Contact Us</button>
+        </a>
+        <button onClick={handleLogout} className='logout-btn'>Logout</button>
+        </div>
       </div>
-      <div className="ChatInstance-Container">
+      
+      {/* <div className="ChatInstance-Container">
+        
         {chatInstances.map((instance) => (
           <div
             key={instance.id}
@@ -131,7 +209,26 @@ function App() {
             />
           </div>
         ))}
+      </div> */}
+      <div className="ChatInstance-Container">
+  {isSplashVisible ? (
+    <SplashPage />
+  ) : (
+    chatInstances.map((instance) => (
+      <div
+        key={instance.id}
+        style={{ display: activeChat === instance.id ? 'block' : 'none' }}
+      >
+        <ChatInstance
+          uuid={instance.id}
+          apiKey={apiKey}
+          onDelete={() => deleteChatInstance(instance.id)}
+        />
       </div>
+    ))
+  )}
+</div>
+
       {isApiKeyModalOpen && (
         <ApiKeyModal
           isOpen={isApiKeyModalOpen}
@@ -142,6 +239,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
